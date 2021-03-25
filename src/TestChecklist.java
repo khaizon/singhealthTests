@@ -13,23 +13,24 @@ public class TestChecklist {
     public static WebDriver driver;
     public static WebDriverWait wait;
 
-    public void loadTenantsPage()  {
+    public void loadTenantsPage() throws InterruptedException {
         WebElement menuButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/section/header/div/button/span")));
         menuButton.click();
+        Thread.sleep(2000);
         WebElement tenantsButton =
                 driver.findElement((By.xpath("//*[@id=\"nav-drawer\"]/div[2]/div/div/div[2]/ul/li[2]")));
         tenantsButton.click();
     }
 
-    public void swipeToAudit() {
+    public void swipeToAudit() throws InterruptedException{
         WebElement tenantCard = driver.findElement((By.xpath("//*[@id=\"root\"]/section/section/section/main/div[3]/div[1]/div/div/div[3]/div")));
 //        tenantCard.click();
+        int posX = tenantCard.getLocation().x;
+        int posY = tenantCard.getLocation().y;
+        System.out.println("tenantCard is at: "+ posX+","+posY);
         Actions action = new Actions(driver);
-        action.clickAndHold(tenantCard);
-        action.moveByOffset(-100,0);
-//        action.dragAndDropBy(tenantCard,-100,0);
+        action.moveByOffset(550,229).clickAndHold().moveByOffset(-300,0).release();
         action.build().perform();
-
     }
 
     public void clickFnBTemplate() {
@@ -64,26 +65,26 @@ public class TestChecklist {
     }
 
     @Test
-    public void testCreateAuditButton() throws InterruptedException{
+    public void testSwipeToAudit() throws InterruptedException{
         loadTenantsPage();
         Thread.sleep(1500);
         swipeToAudit();
         Thread.sleep(2500);
     }
 
-    @Test
-    public void testCreateAuditFnB() throws InterruptedException{
-        loadTenantsPage();
-        Thread.sleep(1500);
-        swipeToAudit();
-        Thread.sleep(1500);
-        clickFnBTemplate();
-        Thread.sleep(2500);
-    }
+//    @Test
+//    public void testCreateAuditFnB() throws InterruptedException{
+//        loadTenantsPage();
+//        Thread.sleep(1500);
+//        swipeToAudit();
+//        Thread.sleep(1500);
+//        clickFnBTemplate();
+//        Thread.sleep(2500);
+//    }
 
     @After
     public void quit() throws InterruptedException{
         Thread.sleep(2000);
-        driver.quit();
+//        driver.quit();
     }
 }
