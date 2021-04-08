@@ -14,31 +14,31 @@ public class TestChecklist {
     public static WebDriverWait wait;
 
     public void loadTenantsPage() throws InterruptedException {
-        WebElement menuButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/section/header/div/button/span")));
-        menuButton.click();
-        Thread.sleep(2000);
+//        WebElement menuButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/div/ul/li[4]/a/span")));
+//        menuButton.click();
+//        Thread.sleep(2000);
         WebElement tenantsButton =
-                driver.findElement((By.xpath("//*[@id=\"nav-drawer\"]/div[2]/div/div/div[2]/ul/li[2]")));
+                driver.findElement((By.xpath("//*[@id=\"root\"]/section/div/ul/li[4]/a")));
         tenantsButton.click();
     }
 
     public void swipeToAudit() throws InterruptedException{
-        WebElement tenantCard = driver.findElement((By.xpath("//*[@id=\"root\"]/section/section/section/main/div[3]/div[1]/div/div[3]/div/div[2]/span[2]")));
+        WebElement tenantCard = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div[3]/div[6]/div/div[2]/div/div[2]/span[2]")));
         int posX = tenantCard.getLocation().x;
         int posY = tenantCard.getLocation().y;
         System.out.println("tenantCard is at: "+ posX+","+posY);
-
         Actions action = new Actions(driver);
-        action.moveByOffset(500,272).clickAndHold().moveByOffset(-300,0).release();
-        //action.moveByOffset(posX+200,posY).clickAndHold().moveByOffset(-300,0).release();
-//        action.clickAndHold(tenantCard).moveByOffset(-300,0).release();
+        action.moveByOffset(posX+200,posY).clickAndHold().moveByOffset(-100,0).release();
         action.build().perform();
     }
 
     private void clickChecklistNext() {
-        WebElement checklistNextButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/section/section" +
-                "/main/div/a" +
-                "/button/span")));
+        WebElement checklistNextButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div[3]/button/span")));
+        checklistNextButton.click();
+    }
+
+    private void clickChecklistNext2() {
+        WebElement checklistNextButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div[3]/button[2]/span")));
         checklistNextButton.click();
     }
 
@@ -48,10 +48,48 @@ public class TestChecklist {
                 "/button/span")));
         checklistSubmitButton.click();
     }
+
+    private void clickNonCompliant() {
+        WebElement checklistSubmitButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div[2]/div/div[1]/div[1]/div[2]/div/div/div[1]/div[2]/div/div/div/div/ul/li[1]/div/img")));
+        checklistSubmitButton.click();
+    }
+
     public void clickFnBTemplate() {
-        WebElement fnbButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/section/section/main/div[2]/a[2]/button/span")));
+        WebElement fnbButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div[2]/a[2]/button/span")));
         fnbButton.click();
     }
+
+    public void selectAuditDate() throws InterruptedException{
+        WebElement AuditDatePicker = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div[2]/div/div" +
+                "/table/tbody/tr[5]/td/div/div/input")));
+        int posX = AuditDatePicker.getLocation().x;
+        int posY = AuditDatePicker.getLocation().y;
+        System.out.println("AuditDatePicker is at: "+ posX+","+posY);
+        AuditDatePicker.click();
+        WebElement notification = driver.findElement(By.xpath("//*[@id=\"root\"]/section/div/ul/li[6]/a"));
+        Thread.sleep(500);
+        Actions action = new Actions(driver);
+        action.moveToElement(notification,0,-250).click();
+        action.build().perform();
+    }
+
+
+    public void selectDueDate() throws InterruptedException{
+        WebElement DueDatePicker = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div[2]/div/div/table" +
+                "/tbody/tr[6]/td/div/div/input")));
+        int posX = DueDatePicker.getLocation().x;
+        int posY = DueDatePicker.getLocation().y;
+        System.out.println("AuditDatePicker is at: "+ posX+","+posY);
+        DueDatePicker.click();
+        WebElement notification = driver.findElement(By.xpath("//*[@id=\"root\"]/section/div/ul/li[6]/a"));
+        Thread.sleep(500);
+        Actions action = new Actions(driver);
+        action.moveToElement(notification,0,-180).click();
+        action.build().perform();
+
+    }
+
+
 
 
 
@@ -117,9 +155,15 @@ public class TestChecklist {
         Thread.sleep(1500);
         clickFnBTemplate();
         Thread.sleep(2500);
+        selectAuditDate();
+        Thread.sleep(1500);
+        selectDueDate();
+        Thread.sleep(1500);
         clickChecklistNext();
         Thread.sleep(1500);
-        clickSubmit();
+        clickNonCompliant();
+        Thread.sleep(1500);
+        clickChecklistNext2();
         Thread.sleep(1500);
     }
 
