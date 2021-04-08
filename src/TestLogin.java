@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class TestLogin {
@@ -15,8 +16,8 @@ public class TestLogin {
     @Before
     public void setup() throws InterruptedException{
         // Optional. If not specified, WebDriver searches the PATH for chromedriver.
-        System.setProperty("webdriver.edge.driver", "C:\\msedgedriver.exe");
-        driver = new EdgeDriver();
+    	System.setProperty("webdriver.gecko.driver","C:\\Users\\Windows\\eclipse-workspace\\ESCSelenium\\drivers\\geckodriver\\geckodriver.exe");
+		WebDriver driver = new FirefoxDriver();
         driver.get("http://localhost:3000/");
 
         Thread.sleep(2500);
