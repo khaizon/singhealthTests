@@ -17,8 +17,8 @@ public class TestLogin {
     public void setup() throws InterruptedException{
         // Optional. If not specified, WebDriver searches the PATH for chromedriver.
     	System.setProperty("webdriver.gecko.driver","C:\\Users\\Windows\\eclipse-workspace\\ESCSelenium\\drivers\\geckodriver\\geckodriver.exe");
-		WebDriver driver = new FirefoxDriver();
-        driver.get("http://localhost:3000/");
+		driver = new FirefoxDriver();
+        driver.get("http://localhost:3000");
 
         Thread.sleep(2500);
     }
@@ -42,12 +42,12 @@ public class TestLogin {
     @Test
     public void testLoginAsAuditorWrongPassword() throws InterruptedException{
 
-        WebElement email = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[1]/div[2]/div/div/input"));
+        WebElement email = driver.findElement(By.name("email"));
         email.sendKeys("cgh@auditor.com");
-        WebElement password = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[2]/div[2]/div/div/input"));
+        WebElement password = driver.findElement(By.name("password"));
         password.sendKeys("wrongpassword");
 
-        WebElement loginButton = driver.findElement((By.xpath("//*[@id=\"root\"]/form/div[2]/div[4]/div/div/div/button/span")));
+        WebElement loginButton = driver.findElement((By.xpath("/html/body/div/form/div[2]/div[4]/div/div/div/button/span")));
         Thread.sleep(1000);
 
         loginButton.click();

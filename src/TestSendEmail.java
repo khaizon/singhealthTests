@@ -61,7 +61,7 @@ public class TestSendEmail {
     public void loginStaff() throws InterruptedException{
         // Optional. If not specified, WebDriver searches the PATH for chromedriver.
     	System.setProperty("webdriver.gecko.driver","C:\\Users\\Windows\\eclipse-workspace\\ESCSelenium\\drivers\\geckodriver\\geckodriver.exe");
-		WebDriver driver = new FirefoxDriver();
+		driver = new FirefoxDriver();
         int width = 600;
         int height = 1000;
         driver.manage().window().setSize(new Dimension(width, height));
