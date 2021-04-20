@@ -1,10 +1,7 @@
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -15,49 +12,51 @@ public class TestSendEmail {
     public static WebDriverWait wait;
 
     public void loadTenantsPage() throws InterruptedException {
-        WebElement menuButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/section/header/div/button/span")));
-        menuButton.click();
-        Thread.sleep(2000);
+//        WebElement menuButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/div/ul/li[4]/a/span")));
+//        menuButton.click();
+//        Thread.sleep(2000);
         WebElement tenantsButton =
-                driver.findElement((By.xpath("//*[@id=\"nav-drawer\"]/div[2]/div/div/div[2]/ul/li[2]")));
+                driver.findElement((By.xpath("//*[@id=\"root\"]/section/div/ul/li[4]/a")));
         tenantsButton.click();
     }
 
-    public void swipeToAudit() throws InterruptedException{
-        WebElement tenantCard = driver.findElement((By.xpath("//*[@id=\"root\"]/section/section/section/main/div[3]/div[1]/div/div[3]/div/div[2]/span[2]")));
+    public void swipeToSend() throws InterruptedException {
+        WebElement tenantCard = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div/section[1]/div/div[2]/div/span[1]")));
         int posX = tenantCard.getLocation().x;
         int posY = tenantCard.getLocation().y;
-        System.out.println("tenantCard is at: "+ posX+","+posY);
-
+        System.out.println("tenantCard is at: " + posX + "," + posY);
         Actions action = new Actions(driver);
-        action.moveByOffset(500,272).clickAndHold().moveByOffset(-300,0).release();
-        //action.moveByOffset(posX+200,posY).clickAndHold().moveByOffset(-300,0).release();
-//        action.clickAndHold(tenantCard).moveByOffset(-300,0).release();
+        action.moveByOffset(posX + 350, posY).clickAndHold().moveByOffset(-350, 0).release();
         action.build().perform();
     }
 
-    private void clickChecklistNext() {
-        WebElement checklistNextButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/section/section" +
-                "/main/div/a" +
-                "/button/span")));
-        checklistNextButton.click();
+    private void clickTenant() {
+        WebElement tenantButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div[3]/div[7]/div/div[2]/div/span")));
+        tenantButton.click();
     }
 
-    private void clickSubmit() {
-        WebElement checklistSubmitButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/section/section" +
-                "/main/div/a" +
-                "/button/span")));
-        checklistSubmitButton.click();
+    private void clickSelf() {
+        WebElement tenantButton = driver.findElement((By.xpath("/html/body/div[2]/div/div[2]/div/div[2]/div[2]/div/div/div[1]/label/span[1]/input")));
+        tenantButton.click();
     }
-    public void clickFnBTemplate() {
-        WebElement fnbButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/section/section/main/div[2]/a[2]/button/span")));
+
+    private void clickSendEmail() {
+        WebElement tenantButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div/div[2]/div[2]/button[2]/span")));
+        tenantButton.click();
+    }
+
+    private void clickReport() {
+        WebElement tenantButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div/section[1]/div/div[2]/div/span[1]")));
+        tenantButton.click();
+    }
+
+    public void clickSend() {
+        WebElement fnbButton = driver.findElement((By.xpath("/html/body/div[2]/div/div[2]/div/div[2]/div[3]/button[2]/span")));
         fnbButton.click();
     }
 
-
-
     @Before
-    public void loginStaff() throws InterruptedException{
+    public void loginStaff() throws InterruptedException {
         // Optional. If not specified, WebDriver searches the PATH for chromedriver.
         System.setProperty("webdriver.edge.driver", "C:\\msedgedriver.exe");
         driver = new EdgeDriver();
@@ -70,66 +69,80 @@ public class TestSendEmail {
         WebElement password = driver.findElement(By.xpath("//*[@id=\"root\"]/form/div[2]/div[2]/div[2]/div/div/input"));
         password.sendKeys("sgh2021");
         WebElement loginButton = driver.findElement((By.xpath("//*[@id=\"root\"]/form/div[2]/div[4]/div/div/div/button/span")));
+        Thread.sleep(1000);
         loginButton.click();
+
 
         Thread.sleep(3000);
     }
 
     @Test
-    public void testLoadTenantsPage() throws InterruptedException{
+    public void testLoadTenantsPage() throws InterruptedException {
         loadTenantsPage();
     }
 
     @Test
-    public void testSwipeToAudit() throws InterruptedException{
+    public void testclickTenant() throws InterruptedException {
         loadTenantsPage();
-        Thread.sleep(1500);
-        swipeToAudit();
         Thread.sleep(2500);
+        clickTenant();
+        Thread.sleep(5500);
     }
 
     @Test
-    public void testCreateAuditFnB() throws InterruptedException{
+    public void testclickReport() throws InterruptedException {
         loadTenantsPage();
-        Thread.sleep(1500);
-        swipeToAudit();
-        Thread.sleep(1500);
-        clickFnBTemplate();
         Thread.sleep(2500);
+        clickTenant();
+        Thread.sleep(5500);
+        clickReport();
+        Thread.sleep(5500);
     }
 
     @Test
-    public void testChecklistNext() throws InterruptedException{
+    public void testclickSendEmail() throws InterruptedException {
         loadTenantsPage();
-        Thread.sleep(1500);
-        swipeToAudit();
-        Thread.sleep(1500);
-        clickFnBTemplate();
         Thread.sleep(2500);
-        clickChecklistNext();
+        clickTenant();
+        Thread.sleep(5500);
+        clickReport();
+        Thread.sleep(5500);
+        clickSendEmail();
         Thread.sleep(1500);
     }
 
     @Test
-    public void testSubmitChecklist() throws InterruptedException{
+    public void testclickSelf() throws InterruptedException {
         loadTenantsPage();
-        Thread.sleep(1500);
-        swipeToAudit();
-        Thread.sleep(1500);
-        clickFnBTemplate();
         Thread.sleep(2500);
-        clickChecklistNext();
+        clickTenant();
+        Thread.sleep(5500);
+        clickReport();
+        Thread.sleep(5500);
+        clickSendEmail();
         Thread.sleep(1500);
-        clickSubmit();
+        clickSelf();
         Thread.sleep(1500);
     }
 
-
-
-
+    @Test
+    public void testSendEmail() throws InterruptedException {
+        loadTenantsPage();
+        Thread.sleep(2500);
+        clickTenant();
+        Thread.sleep(5500);
+        clickReport();
+        Thread.sleep(5500);
+        clickSendEmail();
+        Thread.sleep(1500);
+        clickSelf();
+        Thread.sleep(1500);
+        clickSend();
+        Thread.sleep(1500);
+    }
 
     @After
-    public void quit() throws InterruptedException{
+    public void quit() throws InterruptedException {
         Thread.sleep(2000);
         driver.quit();
     }

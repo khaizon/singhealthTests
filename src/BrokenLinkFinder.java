@@ -48,7 +48,7 @@ public class BrokenLinkFinder {
 		//driver.get("https://sudiptac.bitbucket.io");
 		//driver.get("https://istd.sutd.edu.sg/");
 		//driver.get("https://www.google.com.sg");
-		driver.get("https://statcounter.com/");
+		driver.get("http://localhost:3000/");
 		//driver.get("http://2019.rtss.org/");
 		//driver.get("https://www.netsparker.com/blog/web-security/cve-2014-6271-shellshock-bash-vulnerability-scan/");
 			

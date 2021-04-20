@@ -1,10 +1,7 @@
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -23,7 +20,7 @@ public class TestChecklist {
     }
 
     public void swipeToAudit() throws InterruptedException{
-        WebElement tenantCard = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div[3]/div[6]/div/div[2]/div/div[2]/span[2]")));
+        WebElement tenantCard = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div[3]/div[7]/div/div[2]/div/span")));
         int posX = tenantCard.getLocation().x;
         int posY = tenantCard.getLocation().y;
         System.out.println("tenantCard is at: "+ posX+","+posY);
@@ -39,13 +36,12 @@ public class TestChecklist {
 
     private void clickChecklistNext2() {
         WebElement checklistNextButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div[3]/button[2]/span")));
+        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", checklistNextButton);
         checklistNextButton.click();
     }
 
     private void clickSubmit() {
-        WebElement checklistSubmitButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/section/section" +
-                "/main/div/a" +
-                "/button/span")));
+        WebElement checklistSubmitButton = driver.findElement((By.xpath("//*[@id=\"root\"]/section/main/div[3]/div/button[2]/span")));
         checklistSubmitButton.click();
     }
 
@@ -88,10 +84,6 @@ public class TestChecklist {
         action.build().perform();
 
     }
-
-
-
-
 
     @Before
     public void loginStaff() throws InterruptedException{
@@ -136,19 +128,68 @@ public class TestChecklist {
     }
 
     @Test
-    public void testChecklistNext() throws InterruptedException{
+    public void testSelectAuditDate() throws InterruptedException{
         loadTenantsPage();
         Thread.sleep(1500);
         swipeToAudit();
         Thread.sleep(1500);
         clickFnBTemplate();
         Thread.sleep(2500);
+        selectAuditDate();
+        Thread.sleep(1500);
+    }
+
+    @Test
+    public void testSelectDueDate() throws InterruptedException{
+        loadTenantsPage();
+        Thread.sleep(1500);
+        swipeToAudit();
+        Thread.sleep(1500);
+        clickFnBTemplate();
+        Thread.sleep(2500);
+        selectAuditDate();
+        Thread.sleep(1500);
+        selectDueDate();
+        Thread.sleep(1500);
+
+    }
+
+    @Test
+    public void testClickChecklistNext() throws InterruptedException{
+        loadTenantsPage();
+        Thread.sleep(1500);
+        swipeToAudit();
+        Thread.sleep(1500);
+        clickFnBTemplate();
+        Thread.sleep(2500);
+        selectAuditDate();
+        Thread.sleep(1500);
+        selectDueDate();
+        Thread.sleep(1500);
         clickChecklistNext();
         Thread.sleep(1500);
     }
 
     @Test
-    public void testSubmitChecklist() throws InterruptedException{
+    public void testClickNonCompliant() throws InterruptedException{
+        loadTenantsPage();
+        Thread.sleep(1500);
+        swipeToAudit();
+        Thread.sleep(1500);
+        clickFnBTemplate();
+        Thread.sleep(2500);
+        selectAuditDate();
+        Thread.sleep(1500);
+        selectDueDate();
+        Thread.sleep(1500);
+        clickChecklistNext();
+        Thread.sleep(1500);
+        clickNonCompliant();
+        Thread.sleep(1500);
+    }
+
+    @Test
+    public void testChecklistNext2() throws InterruptedException{
         loadTenantsPage();
         Thread.sleep(1500);
         swipeToAudit();
@@ -167,9 +208,27 @@ public class TestChecklist {
         Thread.sleep(1500);
     }
 
-
-
-
+    @Test
+    public void testSubmitChecklist() throws InterruptedException{
+        loadTenantsPage();
+        Thread.sleep(1500);
+        swipeToAudit();
+        Thread.sleep(1500);
+        clickFnBTemplate();
+        Thread.sleep(3500);
+        selectAuditDate();
+        Thread.sleep(1500);
+        selectDueDate();
+        Thread.sleep(1500);
+        clickChecklistNext();
+        Thread.sleep(1500);
+        clickNonCompliant();
+        Thread.sleep(1500);
+        clickChecklistNext2();
+        Thread.sleep(1500);
+        clickSubmit();
+        Thread.sleep(1500);
+    }
 
     @After
     public void quit() throws InterruptedException{
