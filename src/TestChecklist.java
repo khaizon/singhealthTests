@@ -3,6 +3,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -88,8 +89,8 @@ public class TestChecklist {
     @Before
     public void loginStaff() throws InterruptedException{
         // Optional. If not specified, WebDriver searches the PATH for chromedriver.
-        System.setProperty("webdriver.edge.driver", "C:\\msedgedriver.exe");
-        driver = new EdgeDriver();
+    	System.setProperty("webdriver.gecko.driver","C:\\Users\\Windows\\eclipse-workspace\\ESCSelenium\\drivers\\geckodriver\\geckodriver.exe");
+		driver = new FirefoxDriver();
         int width = 600;
         int height = 1000;
         driver.manage().window().setSize(new Dimension(width, height));
