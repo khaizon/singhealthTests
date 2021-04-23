@@ -139,7 +139,7 @@ public class TestCreateUser {
         loginButton = driver.findElement((By.xpath("//*[@id=\"root\"]/div/form/div/div[5]/div/div/div/button/span")));
         loginButton.click();
         Thread.sleep(4000);
-        WebElement settings = driver.findElement(By.xpath("//*[@id=\"root\"]/section/div/ul/li[8]/a"));
+        WebElement settings = driver.findElement(By.xpath("//*[@id=\"root\"]/section/div/ul/li[6]/a"));
         settings.click();
         Thread.sleep(1000);
         WebElement newUser = driver.findElement(By.xpath("//*[@id=\"rc-tabs-0-tab-4\"]"));

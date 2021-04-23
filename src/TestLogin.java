@@ -1,15 +1,16 @@
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class TestLogin {
@@ -20,6 +21,7 @@ public class TestLogin {
     public static WebElement email;
     public static WebElement password;
     public static WebElement loginAsButton;
+    public static ChromeOptions chromeOptions;
 
     protected String getSaltString() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -37,11 +39,24 @@ public class TestLogin {
     @Before
     public void setup() throws InterruptedException {
         // Optional. If not specified, WebDriver searches the PATH for chromedriver.
-        System.setProperty("webdriver.edge.driver", "C:\\msedgedriver.exe");
-        driver = new EdgeDriver();
-        driver.get("http://localhost:3000");
+        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
+        chromeOptions = new ChromeOptions();
 
-        wait = new WebDriverWait(driver, 5);
+        Map<String, Object> deviceMetrics = new HashMap<>();
+        deviceMetrics.put("width", 550);
+        deviceMetrics.put("height", 940);
+        deviceMetrics.put("pixelRatio", 2.0);
+        Map<String, Object> mobileEmulation = new HashMap<>();
+        mobileEmulation.put("deviceMetrics", deviceMetrics);
+//        mobileEmulation.put("deviceName", "iPhone 6");
+        chromeOptions.setExperimentalOption("mobileEmulation", mobileEmulation);
+        driver = new ChromeDriver(chromeOptions);
+        int width = 565;
+        int height = 1075;
+        driver.manage().window().setSize(new Dimension(width, height));
+//        driver.manage().window().maximize();
+        driver.get("http://localhost:3000/");
+        wait = new WebDriverWait(driver, 7);
 
 
         Thread.sleep(2500);
@@ -82,7 +97,7 @@ public class TestLogin {
         }
 
 
-        Thread.sleep(4000);
+        Thread.sleep(500);
 
 
 //        WebElement errorMessage = driver.findElement(By.xpath("///*[@id=\"root\"]/form/div[2]/div[4]/ul/div/div/div[1]"));
@@ -102,18 +117,34 @@ public class TestLogin {
         password.sendKeys("cgh2021");
         loginButton.click();
 
+        try {
 
-        Thread.sleep(4000);
+            Boolean exist = wait.until(ExpectedConditions.textToBePresentInElement(driver.findElement(By.xpath("//div[@id= \"root\"]")),
+                    "exist"));
+            assert (exist);
+        } catch (TimeoutException e) {
+            assert (false);
+        }
+        Thread.sleep(500);
     }
 
     @Test
     public void testLoginAsAuditorNeverFillPassword() throws InterruptedException {
 
-        email.sendKeys("cgh@audi123tor.com");
+        email.sendKeys("currentixer@gmail.com");
 
         loginButton.click();
 
-        Thread.sleep(4000);
+        try {
+
+            Boolean exist = wait.until(ExpectedConditions.textToBePresentInElement(driver.findElement(By.xpath("//div[@id= \"root\"]")),
+                    "empty"));
+            assert (exist);
+        } catch (TimeoutException e) {
+            assert (false);
+        }
+
+        Thread.sleep(500);
     }
 
     @Test
@@ -123,7 +154,15 @@ public class TestLogin {
         password.sendKeys("noelgifts2021");
         loginButton.click();
 
-        Thread.sleep(2000);
+        try {
+
+            Boolean exist = wait.until(ExpectedConditions.textToBePresentInElement(driver.findElement(By.xpath("//div[@id= \"root\"]")),
+                    "found"));
+            assert (exist);
+        } catch (TimeoutException e) {
+            assert (false);
+        }
+        Thread.sleep(500);
     }
 
     @Test
@@ -133,7 +172,16 @@ public class TestLogin {
         password.sendKeys("noelgifts2021");
         loginButton.click();
 
-        Thread.sleep(2000);
+        try {
+
+            Boolean exist = wait.until(ExpectedConditions.textToBePresentInElement(driver.findElement(By.xpath("//div[@id= \"root\"]")),
+                    "found"));
+            assert (exist);
+        } catch (TimeoutException e) {
+            assert (false);
+        }
+
+        Thread.sleep(500);
     }
 
     @Test
@@ -142,8 +190,14 @@ public class TestLogin {
         email.sendKeys(getSaltString() + "@tenant.com");
         password.sendKeys(getSaltString());
         loginButton.click();
-
-        Thread.sleep(2000);
+        try {
+            Boolean exist = wait.until(ExpectedConditions.textToBePresentInElement(driver.findElement(By.xpath("//div[@id= \"root\"]")),
+                    "found"));
+            assert (exist);
+        } catch (TimeoutException e) {
+            assert (false);
+        }
+        Thread.sleep(500);
     }
 
     @Test
@@ -160,6 +214,7 @@ public class TestLogin {
         } catch (TimeoutException e) {
             assert (false);
         }
+        Thread.sleep(500);
 
     }
 
